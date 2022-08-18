@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { createDraft, getDrafts } = require("../controllers/draftControllers");
+const { createDraw, getDraw } = require("../controllers/drawControllers");
 const { protect } = require("../middleware/authMiddleware");
 
-router.route("/").post(createDraft).get(getDrafts);
+router.route("/").post(createDraw).get(getDraw);
 
 module.exports = router;
