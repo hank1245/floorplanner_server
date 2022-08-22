@@ -3,6 +3,7 @@ const Draw = require("../models/drawModel");
 
 const createDraw = asyncHandler(async (req, res) => {
   const { draftId, walls, items } = req.body;
+  console.log(walls);
   const filter = { draftId };
   const update = { walls, items };
   await Draw.countDocuments(filter);

@@ -6,7 +6,15 @@ const drawSchema = mongoose.Schema({
     required: true,
     ref: "Draft",
   },
-  walls: [[Number]],
+  walls: [
+    {
+      id: String,
+      x1: Number,
+      y1: Number,
+      x2: Number,
+      y2: Number,
+    },
+  ],
   items: [
     {
       id: String,

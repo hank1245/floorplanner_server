@@ -10,6 +10,7 @@ const createDraft = asyncHandler(async (req, res) => {
       id: draft._id,
       name: draft.name,
       description: draft.description,
+      createdAt: draft.createdAt,
     });
   } else {
     res.status(400);
@@ -22,4 +23,20 @@ const getDrafts = asyncHandler(async (req, res) => {
   res.json({ drafts });
 });
 
-module.exports = { createDraft, getDrafts };
+const deleteDraft = asyncHandler(async (req, res) => {
+  const { name } = req.body;
+  console.log(name);
+  await Draft.find({ name }).remove().exec();
+  return res.json({ msg: "delete success" });
+});
+
+module.exports = { createDraft, getDrafts, deleteDraft };
+
+//            dispatch(
+//   moveItem({
+//     id: d.id,
+//     name: d.name,
+//     x: event.x,
+//     y: event.y,
+//   })
+// );
