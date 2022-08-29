@@ -1,16 +1,18 @@
-const { response } = require("express");
 const asyncHandler = require("express-async-handler");
-const Draft = require("../models/draftModel");
+const Draft = require("../models/DraftModel");
 
 const createDraft = asyncHandler(async (req, res) => {
-  const { name, description } = req.body;
-  const draft = await Draft.create({ name, description });
+  const { cardId, walls, items } = req.body;
+  const filter = { cardId };
+  const update = { walls, items };
+  await Draft.countDocuments(filter);
+  let draft = await Draft.findOneAndUpdate(filter, update, {
+    new: true,
+    upsert: true,
+  });
   if (draft) {
     res.status(201).json({
-      id: draft._id,
-      name: draft.name,
-      description: draft.description,
-      createdAt: draft.createdAt,
+      msg: "creation success",
     });
   } else {
     res.status(400);
@@ -18,25 +20,16 @@ const createDraft = asyncHandler(async (req, res) => {
   }
 });
 
-const getDrafts = asyncHandler(async (req, res) => {
-  const drafts = await Draft.find({});
-  res.json({ drafts });
+const getDraft = asyncHandler(async (req, res) => {
+  const { cardId } = req.query;
+  console.log(cardId);
+  const draft = await Draft.findOne({ cardId });
+  if (draft) {
+    res.status(200).json({
+      walls: draft.walls,
+      items: draft.items,
+    });
+  }
 });
 
-const deleteDraft = asyncHandler(async (req, res) => {
-  const { name } = req.body;
-  console.log(name);
-  await Draft.find({ name }).remove().exec();
-  return res.json({ msg: "delete success" });
-});
-
-module.exports = { createDraft, getDrafts, deleteDraft };
-
-//            dispatch(
-//   moveItem({
-//     id: d.id,
-//     name: d.name,
-//     x: event.x,
-//     y: event.y,
-//   })
-// );
+module.exports = { createDraft, getDraft };
